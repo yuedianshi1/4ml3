@@ -1,0 +1,68 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{multicol}
+\usepackage[left=3cm, right=3cm, top=2cm]{geometry}
+\usepackage{mathtools,amssymb}
+
+\title{COMPSCI 4ML3, Introduction to Machine Learning\\
+Assignment 1, Fall 2023}
+\author{Hassan Ashtiani, McMaster University}
+\date{Due date: Thursday, October 5th, 11pm}
+\begin{document}
+
+\maketitle
+
+{\bf Notes.} Type your solutions {\bf in Latex} and upload {\bf a single pdf file} that includes all your answers in Avenue. Use Teams to ask/answer questions. %This assignment has bonus points. If you get a grade above 100, the extra points will be used to compensate the grade of your other assignments in case they are less than 100 (the bonus points will not help with the exams).
+
+{\bf Review (Linear Algebra).} A set of $k$ $d$-dimensional vectors $v_1,v_2,...,v_k \in \mathbb{R}^d$ are linearly dependent if there exists $a_1, a_2, ..., a_k \in \mathbb{R}$ such that at least one of $a_i$'s is non-zero and $\sum_{i=1}^k a_iv_i=\vec{0}$. Also, a set of vectors are linearly independent if they are not linearly dependent.
+    
+Furthermore, the column rank of a matrix (i.e., the number of linearly independent column vectors) is equal to its row rank (i.e., the number of linearly independent row vectors) --- in fact, this is why we can call it just the ``rank'' of the matrix. A $k$-by-$k$ square matrix is invertible if and only if it is full rank (i.e., its rank is $k$). Also, $k$-by-$k$ matrix $A$ is said to be positive definite if for every $u\in \mathbb{R}^d$, $u^TAu>0$. All positive definite matrices are invertible.
+
+
+{\bf Review (Ordinary Least Squares).} In the ordinary least squares problem we are given $n$ data points $\{(x^i, y^i)\}_{i=1}^n$ where each $x^i\in \mathbb{R}^d$ and each $y^i\in \mathbb{R}$, and the goal is fitting a line/hyperplane (represented by a $d$-dimensional vector $W$) with the minimum sum of squared errors:  
+
+\[ 
+\min_{W} \sum_{i=1}^n ((x^i)^TW - y^i)^2 =\min_{W} \|XW-Y\|_2^2 
+\]
+
+where in the matrix form (on the right side) $X$ is an $n$-by-$d$ matrix, and $Y$ is an $n$-dimensional vector.
+
+
+\begin{enumerate}
+
+\item Consider the least-squares setting discussed above and assume $(X^TX)$ is invertible. In each of the following cases, either prove that $(Z^TZ)$ is necessarily invertible, or give a counter example.
+
+\begin{enumerate}
+    \item {[\bf 5 points]} $Z = X^TX + 0.1 I_{d\times d}$, where $I_{d\times d}$ is a $d$-by-$d$ identity matrix.
+    \item {[\bf 5 points]} We add an arbitrary new column $u\in \mathbb{R}^d$ (i.e., a new feature) to $X$ and call it $Z$ (so $Z=[X | u ]$ is an $n$-by-$d+1$ matrix).
+    \item {[\bf 5 points]} We add an arbitrary new row $v\in \mathbb{R}^n$ (i.e., a new data point) to $X$ and call it $Z$ (so $Z=[X^T | v ]^T$ is an $n+1$-by-$d$ matrix).
+\end{enumerate}
+
+
+     \item Consider the least squares problem. 
+     \begin{enumerate}
+         \item {[\bf 5 points]} Assume $Rank(X)=n=d$ and let $W^{LS}$ be the solution of the least squares. Show $X^T(Y-XW^{LS})=0$.
+         \item {[\bf 5 points]} Assume $Rank(X)=n<d$, and let $W$ be ``one of the solutions'' of the least squares minimization problem. Can we always say $X^T(Y-XW)=0$? Why?
+         \item {[\bf 5 points]} Assume $Rank(X)=n=d$. Prove that $\|XW^{LS}-Y\|_2^2=0$.
+         \item {[\bf 10 points]} Assume $Rank(X)=n<d$. Can we say that $\min_{W}\|XW-Y\|_2^2=0$? Prove your answer.
+     \end{enumerate}
+     
+     
+    \item {[\bf 20 points]} In this question we will use least squares to find the best line ($\hat{y}=ax+b$) that fits a non-linear function, namely $f(x)=2x-5x^3+1$. For this, assume that you are given a set of $n$ training points $\{(x^i,y^i)\}_{i=1}^{n}$=$\{((i/n), 2(i/n) - 5(i/n)^3)+1\}_{i=1}^{n}$. Find a line (i.e., $a,b\in \mathbb{R})$ that fits the training data the best when $n\rightarrow \infty$. Write down your calculations as well as the final values for $a$ and $b$.
+    (Additional notes: the $n\rightarrow \infty$ assumption basically means that we are dealing with an integral rather than a finite summation. If it makes it easier for you, instead of working with an actual training data you can assume $x$ is uniformly distributed on $[0,1]$.)
+    
+    \item {[\bf 20 points]} This question is similar to the previous one, except that you are allowed to use a program to find the final answer. Assume the input is three dimensional ($x_1,x_2,x_3$), and the target function is $f(x_1,x_2,x_3)=x_1+3x_2+4x_3+5x_1x_2-5x_2x_3+x_1^2 x_3^2+ (x_1+x_2)^{x_3}$. Find $a, b, c, d\in \mathbb{R}$ such that the hyperplane $\hat{y}=ax_1+bx_2+cx_3+d$ fits the data the best when $x$ is uniformly distributed in $[1,2]^3$ (the least squares solution). Report the values of $a, b, c, d$, and include your code in the pdf file for the solutions. You can use the python OLS script that is provided in Avenue as a starting point.
+    
+    \item {[\bf 20 points]} In this question we would like to fit a line with zero $y$-intercept ($\hat{y}=ax$) to the curve $y=x^2$. However, instead of minimizing the sum of squares of errors, we want to minimize the following objective function:
+    
+    $$\sum_i \left[  \log \left(\frac{\hat{y}^i}{y^i}\right) \right]^2$$
+    
+    Assume that the distribution of $x$ is uniform on $[1,2]$. What is the optimal value for $a$? Show your work.
+    
+    %\item {[\bf 25 points]} Assume that $X$ has a column of all 1's. (In the class we added this column of all 1's to the matrix $X$ to be able to take into account the bias/intercept of the line/plane). Let $W^{LS}$ be the solution to the least squares minimization problem, and $\Delta=(XW^{LS}-Y)$ be the matrix of residuals. What can we say about the sum of the elements of $\Delta$? Is it a constant number? Can you calculate it? Show your work. (Hint: look at $X^T\Delta$). 
+    
+    
+
+\end{enumerate}
+
+\end{document}
